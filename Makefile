@@ -1,5 +1,6 @@
 JQ = jq
 CURL = curl
+MARKDOWN = markdown
 
 HSURL = https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/finnishCoronaData/v2
 THLURL = https://sampo.thl.fi/pivot/prod/fi/epirapo/covid19case/fact_epirapo_covid19case.json?row=hcd-444832&column=dateweek2020010120201231-443702L
@@ -9,11 +10,11 @@ PDFS = thl.pdf hs.pdf
 
 .PHONY: all clean
 
-all: $(PDFS) thldata.json
+all: $(PDFS) README.html
 
 clean:
 	rm -f $(HSPARTS) $(PDFS) $(PDFS:%.pdf=%.r.Rout) \
-		thldata.json hsdata.json
+		thldata.json hsdata.json README.html
 
 $(PDFS): %.pdf: %.r
 	R CMD BATCH $<
@@ -29,3 +30,6 @@ hsdata.json:
 
 thldata.json:
 	$(CURL) -o $@ '$(THLURL)'
+
+%.html: %.md
+	$(MARKDOWN) -o $@ $<
