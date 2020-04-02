@@ -8,7 +8,7 @@ conf.agg <- aggregate(dn ~ date, transform(conf, dn=1), sum)
 if (is.unsorted(conf.agg$date)) conf.agg <- conf.agg[order(conf.agg$date),]
 conf.agg <- transform(conf.agg, n=cumsum(dn),
                       days=as.double(difftime(date, min(date), units="d")))
-d.new <- "2020-03-14"
+d.new <- "2020-03-12"
 conf.new <- conf.agg[conf.agg$date >= d.new,]
 conf.lm <- lm(log10(n) ~ days, conf.new)
 conf.lm10 <- 10^(conf.lm$coefficients)
