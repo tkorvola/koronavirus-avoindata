@@ -8,6 +8,10 @@ conf.agg <- aggregate(dn ~ date, transform(conf, dn=1), sum)
 if (is.unsorted(conf.agg$date)) conf.agg <- conf.agg[order(conf.agg$date),]
 conf.agg <- transform(conf.agg, n=cumsum(dn),
                       days=as.double(difftime(date, min(date), units="d")))
+d.new <- "2020-03-14"
+conf.new <- conf.agg[conf.agg$date >= d.new,]
+conf.lm <- lm(log10(n) ~ days, conf.new)
+conf.lm10 <- 10^(conf.lm$coefficients)
 
 pdf("hs.pdf", title="HS")
 print(qplot(days, n, data=conf.agg)
@@ -15,11 +19,11 @@ print(qplot(days, n, data=conf.agg)
       + geom_abline(slope=log10(1.1), intercept=0)
       + geom_abline(slope=log10(1.15), intercept=0, col="blue")
       + geom_abline(slope=log10(1.3), intercept=0, col="red")
-      + ggtitle("Lähde: HS", subtitle="Suorat 10, 15 ja 30 % / d"))
-d.new <- "2020-03-15"
-conf.new <- conf.agg[conf.agg$date >= d.new,]
-conf.lm <- lm(log10(n) ~ days, conf.new)
-conf.lm10 <- 10^(conf.lm$coefficients)
+      + geom_vline(xintercept=difftime(d.new, min(conf.agg$date), units="d"),
+                   linetype="dotted")
+      + ggtitle("Lähde: HS",
+                subtitle=paste("Kasvusuorat 10, 15 ja 30 % / d.  Käännekohta",
+                               d.new)))
 print(qplot(days, n, data=conf.new)
       + scale_y_log10() + annotation_logticks(sides="l")
       + geom_abline(slope=conf.lm$coefficients[2],
