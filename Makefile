@@ -12,7 +12,8 @@ PDFS = thl.pdf hs.pdf
 all: $(PDFS) thldata.json
 
 clean:
-	rm $(HSPARTS) $(PDFS) thldata.json hsdata.json
+	rm -f $(HSPARTS) $(PDFS) $(PDFS:%.pdf=%.r.Rout) \
+		thldata.json hsdata.json
 
 $(PDFS): %.pdf: %.r
 	R CMD BATCH $<

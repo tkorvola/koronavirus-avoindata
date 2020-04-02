@@ -5,3 +5,5 @@ deaths.json
 hs.pdf
 thldata.json
 thl.pdf
+.RData
+*.Rout
