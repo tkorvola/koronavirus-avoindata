@@ -3,13 +3,9 @@ library(ggplot2)
 
 foo <- fromJSONstat("thldata.json")[[1]]
 foo <- foo[!is.na(foo$value),]
-thl <- with(foo, data.frame(
-                     hcd=as.factor(hcd),
-                     date=as.Date(dateweek2020010120201231),
-                     value=as.integer(value)))
-thl.all <- thl[thl$hcd == "Kaikki sairaanhoitopiirit",]
-thl.all$hcd <- NULL
-thl <- thl[thl$hcd != "Kaikki sairaanhoitopiirit",]
+thl.all <- with(foo, data.frame(
+                         date=as.Date(dateweek2020010120201231),
+                         value=as.integer(value)))
 if (is.unsorted(thl.all$date)) thl.all <- thl.all[order(thl.all$date),]
 thl.all <- transform(thl.all, n=cumsum(value),
                      days=as.double(date - min(date), units="days"))
