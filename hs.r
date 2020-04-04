@@ -22,8 +22,9 @@ print(qplot(days, n, data=conf.agg)
       + geom_vline(xintercept=difftime(d.new, min(conf.agg$date), units="d"),
                    linetype="dotted")
       + ggtitle("Lähde: HS",
-                subtitle=paste("Kasvusuorat 10, 15 ja 30 % / d.  Käännekohta",
-                               d.new)))
+                subtitle=paste("Kasvusuorat 10, 15 ja 30 % / d.  Käännekohta ",
+                               d.new, ", uusin ", max(conf.agg$date),
+                               sep="")))
 print(qplot(days, n, data=conf.new)
       + scale_y_log10() + annotation_logticks(sides="l")
       + geom_abline(slope=conf.lm$coefficients[2],
