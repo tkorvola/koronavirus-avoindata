@@ -11,6 +11,7 @@ d.new <- "2020-03-12"
 conf.new <- conf.agg[conf.agg$date >= d.new,]
 conf.lm <- lm(log10(n) ~ days, conf.new)
 conf.lm10 <- 10^(conf.lm$coefficients)
+conf.lm2 <- lm(n ~ days, conf.new)
 
 pdf("hs.pdf", title="HS")
 print(qplot(days, n, data=conf.agg)
@@ -30,4 +31,7 @@ print(qplot(days, n, data=conf.new)
                     intercept=conf.lm$coefficients[1])
       + ggtitle(paste("Kasvu", 100 * (conf.lm10["days"] - 1),
                       "% / d alkaen", d.new)))
+print(qplot(date, n, data=conf.new)
+      + geom_smooth(method="lm")
+      + ggtitle(paste("Kasvu", conf.lm2$coefficients["days"], "/ d")))
 dev.off()

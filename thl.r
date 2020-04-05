@@ -13,6 +13,7 @@ d.new <- "2020-03-12"
 thl.new <- thl.all[thl.all$date >= d.new,]
 thl.lm <- lm(log10(n) ~ days, thl.new)
 thl.lm10 <- 10^(thl.lm$coefficients)
+thl.lm2 <- lm(n ~ days, thl.new)
 
 pdf("thl.pdf", title="THL")
 print(qplot(days, n, data=thl.all)
@@ -32,4 +33,7 @@ print(qplot(days, n, data=thl.new)
                     intercept=thl.lm$coefficients[1])
       + ggtitle(paste("Kasvu", 100 * (thl.lm10["days"] - 1),
                       "% / d alkaen", d.new)))
+print(qplot(date, n, data=thl.new)
+      + geom_smooth(method="lm")
+      + ggtitle(paste("Kasvu", thl.lm2$coefficients["days"], "/ d")))
 dev.off()
