@@ -1,6 +1,6 @@
 CURL = curl -f
 JQ = jq
-MARKDOWN = markdown
+MARKDOWN = markdown -f fencedcode
 
 HSURL = https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/finnishCoronaData/v2
 THLURL = https://sampo.thl.fi/pivot/prod/fi/epirapo/covid19case/fact_epirapo_covid19case.json?column=dateweek2020010120201231-443702L
