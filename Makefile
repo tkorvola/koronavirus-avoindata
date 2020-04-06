@@ -8,13 +8,16 @@ THLURL = https://sampo.thl.fi/pivot/prod/fi/epirapo/covid19case/fact_epirapo_cov
 HSPARTS = recovered.json confirmed.json deaths.json
 PDFS = thl.pdf hs.pdf
 
-.PHONY: all clean
+.PHONY: all clean distclean
 
 all: $(PDFS) README.html
 
-clean:
-	rm -f $(HSPARTS) $(PDFS) $(PDFS:%.pdf=%.r.Rout) \
-		thldata.json hsdata.json README.html
+clean: 
+	rm -f thldata.json hsdata.json $(HSPARTS) $(PDFS) \
+		$(PDFS:%.pdf=%.r.Rout)
+
+distclean: clean
+	rm -f README.html
 
 $(PDFS): %.pdf: %.r
 	R CMD BATCH $<
