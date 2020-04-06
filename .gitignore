@@ -1,10 +1,5 @@
-hsdata.json
-recovered.json
-confirmed.json
-deaths.json
-hs.pdf
-thldata.json
-thl.pdf
+*.json
+*.pdf
 .RData
 *.Rout
 README.html
