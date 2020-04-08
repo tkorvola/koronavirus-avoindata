@@ -1,5 +1,6 @@
 CURL = curl -f
 JQ = jq
+RBATCH = R CMD BATCH
 MARKDOWN = markdown -f fencedcode
 
 HSURL = https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/finnishCoronaData/v2
@@ -23,7 +24,7 @@ distclean: clean
 	rm -f README.html
 
 $(PDFS): %.pdf: %.r
-	R CMD BATCH $<
+	$(RBATCH) $<
 
 hs.pdf: $(HSPARTS)
 thl.pdf: thldata.json

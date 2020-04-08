@@ -6,8 +6,9 @@ conf <- transform(fromJSON("confirmed.json"), date=as.POSIXct(date))
 conf.agg <- aggregate(dn ~ date, transform(conf, dn=1), sum)
 if (is.unsorted(conf.agg$date)) conf.agg <- conf.agg[order(conf.agg$date),]
 conf.agg <- transform(conf.agg, n=cumsum(dn),
-                      days=as.double(difftime(date, min(date), units="d")))
-d.new <- "2020-03-12"
+                      days=as.double(difftime(date, date[1], units="d")))
+#d.new <- "2020-03-12"
+d.new <- "2020-03-28"
 conf.new <- conf.agg[conf.agg$date >= d.new,]
 conf.lm <- lm(log10(n) ~ days, conf.new)
 conf.lm10 <- 10^(conf.lm$coefficients)
@@ -19,11 +20,12 @@ print(qplot(days, n, data=conf.agg)
       + geom_abline(slope=log10(1.1), intercept=0)
       + geom_abline(slope=log10(1.15), intercept=0, col="blue")
       + geom_abline(slope=log10(1.3), intercept=0, col="red")
-      + geom_vline(xintercept=difftime(d.new, min(conf.agg$date), units="d"),
+      + geom_vline(xintercept=difftime(d.new, conf.agg$date[1], units="d"),
                    linetype="dotted")
       + ggtitle("Lähde: HS",
-                subtitle=paste("Kasvusuorat 10, 15 ja 30 % / d.  Käännekohta ",
-                               d.new, ", uusin ", max(conf.agg$date),
+                subtitle=paste("Kasvusuorat 10, 15 ja 30 % / d.  Raja ",
+                               d.new, ", uusin ",
+                               conf.agg$date[nrow(conf.agg)],
                                sep="")))
 print(qplot(days, n, data=conf.new)
       + scale_y_log10() + annotation_logticks(sides="l")
@@ -35,3 +37,6 @@ print(qplot(date, n, data=conf.new)
       + geom_smooth(method="lm")
       + ggtitle(paste("Kasvu", conf.lm2$coefficients["days"], "/ d")))
 dev.off()
+
+summary(conf.lm)
+summary(conf.lm2)
