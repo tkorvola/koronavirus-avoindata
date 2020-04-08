@@ -1,7 +1,7 @@
 library(jsonlite)
 library(ggplot2)
 
-conf <- transform(fromJSON("confirmed.json"), date=as.POSIXct(date))
+conf <- transform(fromJSON("hsdata.json")$confirmed, date=as.POSIXct(date))
 
 conf.agg <- aggregate(dn ~ date, transform(conf, dn=1), sum)
 if (is.unsorted(conf.agg$date)) conf.agg <- conf.agg[order(conf.agg$date),]

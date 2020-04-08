@@ -1,5 +1,4 @@
 CURL = curl -f
-JQ = jq
 RBATCH = R CMD BATCH
 MARKDOWN = markdown -f fencedcode
 
@@ -8,9 +7,6 @@ THLURL = https://sampo.thl.fi/pivot/prod/fi/epirapo/covid19case/fact_epirapo_cov
 HOSPURL = https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/finnishCoronaHospitalData
 
 DATA = thldata.json hsdata.json hospdata.json
-HSPARTS = recovered.json confirmed.json deaths.json
-HOSPPARTS = hospitalised.json
-PARTS = $(HSPARTS) $(HOSPPARTS)
 PDFS = thl.pdf hs.pdf hosp.pdf
 
 .PHONY: all clean distclean
@@ -18,23 +14,13 @@ PDFS = thl.pdf hs.pdf hosp.pdf
 all: $(PDFS) README.html
 
 clean: 
-	rm -f $(DATA) $(PARTS) $(PDFS) $(PDFS:%.pdf=%.r.Rout)
+	rm -f $(DATA) $(PDFS) $(PDFS:%.pdf=%.r.Rout)
 
 distclean: clean
 	rm -f README.html
 
-$(PDFS): %.pdf: %.r
+$(PDFS): %.pdf: %.r %data.json
 	$(RBATCH) $<
-
-hs.pdf: $(HSPARTS)
-thl.pdf: thldata.json
-hosp.pdf: $(HOSPPARTS)
-
-$(PARTS): %.json:
-	$(JQ) .$* $< > $@
-
-$(HSPARTS): hsdata.json
-$(HOSPPARTS): hospdata.json
 
 hsdata.json:
 	$(CURL) -o $@ '$(HSURL)'

@@ -2,7 +2,7 @@ library(jsonlite)
 library(ggplot2)
 library(tidyr)
 
-hosp <- transform(fromJSON("hospitalised.json"),
+hosp <- transform(fromJSON("hospdata.json")$hospitalised,
                   area=as.factor(area), date=as.POSIXct(date))
 hosp.all <- hosp[hosp$area == "Finland",]
 hosp.all$area <- NULL
