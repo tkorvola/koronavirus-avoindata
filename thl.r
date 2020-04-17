@@ -25,7 +25,8 @@ print(qplot(days, n, data=thl.all)
       + geom_vline(xintercept=difftime(d.new, thl.all$date[1], units="d"),
                    linetype="dotted")
       + ggtitle("Lähde: THL",
-                subtitle=paste("Kasvusuorat 10, 15 ja 30 % / d.  Raja ",
+                subtitle=paste("Kasvusuorat 10, 15 ja 30 % / d.  Alkaa ",
+                               thl.all$date[1], ", raja ",
                                d.new, ", uusin ", thl.all$date[nrow(thl.all)],
                                sep="")))
 print(qplot(days, n, data=thl.new)

@@ -23,7 +23,8 @@ print(qplot(days, n, data=conf.agg)
       + geom_vline(xintercept=difftime(d.new, conf.agg$date[1], units="d"),
                    linetype="dotted")
       + ggtitle("Lähde: HS",
-                subtitle=paste("Kasvusuorat 10, 15 ja 30 % / d.  Raja ",
+                subtitle=paste("Kasvusuorat 10, 15 ja 30 % / d.  Alkaa ",
+                               conf.agg$date[1], ", raja ",
                                d.new, ", uusin ",
                                conf.agg$date[nrow(conf.agg)],
                                sep="")))
