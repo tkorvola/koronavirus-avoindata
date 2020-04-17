@@ -38,6 +38,9 @@ Esimerkki dataa [täällä](exampleObservationDataV2.json)
 Suoraan itse käyttämämme THL:n data on luettavissa osoitteesta (https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/processedThlData).
 Esimerkkidata [täällä](exampleProcessedThlData.json).
 
+Testaukseen liittyvää dataa on tarjolla Suomen tasolla aikasarjana (https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/thlTestData)
+ja viimeisin tieto sairaanhoitopiireittäin (https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/hcdTestData).
+
 ## Datan formaatti
 
 Rajapinnat palauttvata JSONia.
@@ -129,6 +132,9 @@ jos parempaa vaihtoehtoa ilmaantuu / keksimme miten / ilmoitustapa vakiintuu.
 Prosessoidusta THL-datasta saa parhaan kuvan [esimerkkidatasta](exampleProcessedThlData.json). `value`-kenttä kertoo, kuinka monta tartuntatapausta testien perusteella
 on havaittu päivänä.
 
+Testidatan esimerkit ovat [täällä Suomen aikasarjasta](exampleFinlandTimeseriesTestData.json) ja
+[täällä viimeisimmästä sairaanhoitopiirin tiedosta](latestHcdTestData.json).
+
 # Dataa on käytetty täällä
 
 ## HS:n grafiikat
@@ -192,6 +198,8 @@ HS on käyttänyt ja käyttää dataa ainakin näissä grafiikoissa:
 
 [Finland Corona Stat updates](https://finlandcoronastats.com/) ([source](https://github.com/Boochoo/finland-conora-stats)) ([Ermias Hailemicheal](https://www.linkedin.com/in/ermi/))
 
+[COVID-19 Stats Finland mobile app](https://github.com/secretwpn/covid_stats_finland) ([secretwpn](https://github.com/secretwpn))
+
 # Huomautus
 
 Tämä data on peräisin julkisista lähteistä. HS pyrkii kasaamaan sen mahdollisimman paikkansa pitävänä. Emme takaa, että päivitämme dataa jatkuvasti ja saatamme lopettaa datan päivittämisen ennalta ilmoittamatta, esimerkiksi tartuntatilanteen tai julkisten lähteiden muuttuessa. Saatamme myös muuttaa datarakennetta tai osoitteita ennalta ilmoittamatta.
@@ -215,6 +223,9 @@ For observations, we offer now (https://w3qa5ydb4l.execute-api.eu-west-1.amazona
 observations endpoint, but uses the THL data as a source. See example data [here](exampleObservationDataV2.json).
 
 Our processed THL data can be read from (https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/processedThlData). Example data [here](exampleProcessedThlData.json).
+
+Testing related data is offered for Finland level in a timeseries (https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/thlTestData)
+and the latest information on health carea area level (https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/hcdTestData).
 
 ## Data format
 
@@ -305,6 +316,9 @@ This data is snapshots from THL published reports, which makes the format a litt
 have time / figure out how / the way it's reprted stabilises.
 
 Best idea about the processed THL data is in [the example data](exampleProcessedThlData.json). `value` field tells how many infections were found in tests on that date.
+
+Test data examples are [here for Finnish timeseries test data](exampleFinlandTimeseriesTestData.json) and
+[here for the latest health care district test data](latestHcdTestData.json).
 
 # Lisenssi: MIT-lisenssi
 
