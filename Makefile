@@ -5,9 +5,10 @@ MARKDOWN = markdown -f fencedcode
 HSURL = https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/finnishCoronaData/v2
 THLURL = https://sampo.thl.fi/pivot/prod/fi/epirapo/covid19case/fact_epirapo_covid19case.json?column=dateweek2020010120201231-443702L
 HOSPURL = https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/finnishCoronaHospitalData
+TESTURL = https://w3qa5ydb4l.execute-api.eu-west-1.amazonaws.com/prod/thlTestData
 
-DATA = thldata.json hsdata.json hospdata.json
-PDFS = thl.pdf hs.pdf hosp.pdf
+DATA = thldata.json hsdata.json hospdata.json testdata.json
+PDFS = thl.pdf hs.pdf hosp.pdf test.pdf
 
 .PHONY: all clean distclean
 
@@ -22,6 +23,8 @@ distclean: clean
 $(PDFS): %.pdf: %.r %data.json
 	$(RBATCH) $<
 
+test.pdf: hsdata.json
+
 hsdata.json:
 	$(CURL) -o $@ '$(HSURL)'
 
@@ -30,6 +33,9 @@ thldata.json:
 
 hospdata.json:
 	$(CURL) -o $@ '$(HOSPURL)'
+
+testdata.json:
+	$(CURL) -o $@ '$(TESTURL)'
 
 %.html: %.md
 	$(MARKDOWN) -o $@ $<
