@@ -1,20 +1,20 @@
 library(jsonlite)
 library(ggplot2)
+library(magrittr)
 library(dplyr)
 
-conf <- transform(fromJSON("hsdata.json")$confirmed, date=as.POSIXct(date))
-conf.agg <- aggregate(dn ~ date, transform(conf, dn=1), sum)
-if (is.unsorted(conf.agg$date)) conf.agg <- conf.agg[order(conf.agg$date),]
-conf.agg <- transform(conf.agg, n=cumsum(dn),
-                      days=as.double(difftime(date, date[1], units="d")))
+fromJSON("hsdata.json")$confirmed %>% mutate(date=as.POSIXct(date)) -> conf
+conf %>% count(date) %>% rename(dn=n) %>% arrange(date) %>%
+    mutate(n=cumsum(dn),
+           days=as.double(difftime(date, date[1], units="d"))) -> conf.agg
 
-(fromJSON("testdata.json")$tested
-    %>% transform(date=as.POSIXct(date)) %>% rename(tested=value)
-    -> tests)
+(fromJSON("testdata.json")$tested %>% mutate(date=as.POSIXct(date))
+    %>% rename(tested=value)) -> tests
 
 tc <- merge(tests, conf.agg, by="date", all=TRUE)
 tc$dn[is.na(tc$dn)] <- 0
-tc <- filter(tc, dn != 0 | tested != 0)
+tc %<>% filter(dn != 0 | tested != 0)
+
 d.new <- "2020-03-28"
 tc %>% filter(date >= d.new) -> tc.new
 tc.lm <- lm(dn ~ tested + n, tc)

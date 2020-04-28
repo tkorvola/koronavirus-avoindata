@@ -1,27 +1,26 @@
 library(jsonlite)
 library(ggplot2)
+library(dplyr)
 
-conf <- transform(fromJSON("hsdata.json")$confirmed, date=as.POSIXct(date))
+fromJSON("hsdata.json")$confirmed %>% mutate(date=as.POSIXct(date)) -> conf
+conf %>% count(date) %>% rename(dn=n) %>% arrange(date) %>%
+    mutate(n=cumsum(dn),
+           days=as.double(difftime(date, date[1], units="d"))) -> conf.agg
 
-conf.agg <- aggregate(dn ~ date, transform(conf, dn=1), sum)
-if (is.unsorted(conf.agg$date)) conf.agg <- conf.agg[order(conf.agg$date),]
-conf.agg <- transform(conf.agg, n=cumsum(dn),
-                      days=as.double(difftime(date, date[1], units="d")))
 #d.new <- "2020-03-12"
 d.new <- "2020-03-28"
-conf.new <- conf.agg[conf.agg$date >= d.new,]
+conf.agg %>% filter(date >= d.new) -> conf.new
 conf.lm <- lm(log10(n) ~ days, conf.new)
 conf.lm10 <- 10^(conf.lm$coefficients)
 conf.lm2 <- lm(n ~ days, conf.new)
 
-dead <- transform(fromJSON("hsdata.json")$deaths, date=as.POSIXct(date))
-dead.agg <- aggregate(dn ~ date, transform(dead, dn=1), sum)
-if (is.unsorted(dead.agg$date)) dead.agg <- dead.agg[order(dead.agg$date),]
-dead.agg <- transform(dead.agg, n=cumsum(dn),
-                      days=as.double(difftime(date, date[1], units="d")))
+fromJSON("hsdata.json")$deaths %>% mutate(date=as.POSIXct(date)) -> dead
+dead %>% count(date) %>% rename(dn=n) %>% arrange(date) %>%
+    mutate(n=cumsum(dn),
+           days=as.double(difftime(date, date[1], units="d"))) -> dead.agg
 
 dd.new <- "2020-03-31"
-dead.new <- dead.agg[dead.agg$date >= dd.new,]
+dead.agg %>% filter(date >= dd.new) -> dead.new
 dead.lm <- lm(log10(n) ~ days, dead.new)
 dead.lm10 <- 10^(dead.lm$coefficients)
 dead.lm2 <- lm(n ~ days, dead.new)

@@ -1,17 +1,17 @@
 library(rjstat)
 library(ggplot2)
+library(dplyr)
 
-foo <- fromJSONstat("thldata.json")[[1]]
-foo <- foo[!is.na(foo$value),]
-thl.all <- with(foo, data.frame(
-                         date=as.Date(dateweek2020010120201231),
-                         value=as.integer(value)))
-if (is.unsorted(thl.all$date)) thl.all <- thl.all[order(thl.all$date),]
-thl.all <- transform(thl.all, n=cumsum(value),
-                     days=as.double(date - date[1], units="days"))
+(fromJSONstat("thldata.json")[[1]] %>% filter(!is.na(value))
+    %>% transmute(date=as.Date(dateweek2020010120201231),
+                  dn=as.integer(value))
+    %>% arrange(date)
+    %>% mutate(n=cumsum(dn),
+               days=as.double(date - date[1], units="days"))) -> thl.all
+
 #d.new <- "2020-03-12"
 d.new <- "2020-03-28"
-thl.new <- thl.all[thl.all$date >= d.new,]
+thl.all %>% filter(date >= d.new) -> thl.new
 thl.lm <- lm(log10(n) ~ days, thl.new)
 thl.lm10 <- 10^(thl.lm$coefficients)
 thl.lm2 <- lm(n ~ days, thl.new)

@@ -1,16 +1,18 @@
 library(jsonlite)
 library(ggplot2)
+library(dplyr)
 library(tidyr)
+library(magrittr)
 
-hosp <- transform(fromJSON("hospdata.json")$hospitalised,
-                  area=as.factor(area), date=as.POSIXct(date))
-hosp.all <- hosp[hosp$area == "Finland",]
-hosp.all$area <- NULL
-if (is.unsorted(hosp.all$date)) hosp.all <- hosp.all[order(hosp.all$date),]
+(fromJSON("hospdata.json")$hospitalised
+    %>% mutate(area=as.factor(area), date=as.POSIXct(date))) -> hosp
+hosp %>% filter(area == "Finland") %>% select(-area) %>%
+    arrange(date) -> hosp.all
 hosp.l <- pivot_longer(hosp.all, -date, "var")
-hosp.all <- transform(hosp.all, days=as.double(date - date[1], units="days"))
+hosp.all %<>% mutate(days=as.double(date - date[1], units="days"))
+
 d.new <- "2020-03-31"
-hosp.new <- hosp.all[hosp.all$date >= d.new,]
+hosp.all %>% filter(date >= d.new) -> hosp.new
 dead.lm <- lm(log10(dead) ~ days, hosp.new)
 dead.lm10 <- 10^(dead.lm$coefficients)
 dead.lm2 <- lm(dead ~ days, hosp.new)
