@@ -57,7 +57,7 @@ print(qplot(days, n, data=dead.agg)
       + geom_abline(slope=log10(1.1), intercept=0)
       + geom_abline(slope=log10(1.15), intercept=0, col="blue")
       + geom_abline(slope=log10(1.3), intercept=0, col="red")
-      + geom_vline(xintercept=difftime(d.new, dead.agg$date[1], units="d"),
+      + geom_vline(xintercept=difftime(dd.new, dead.agg$date[1], units="d"),
                    linetype="dotted")
       + ggtitle("Kuolleet",
                 subtitle=paste("Kasvusuorat 10, 15 ja 30 % / d.  Alkaa ",
