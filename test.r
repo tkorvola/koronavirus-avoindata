@@ -11,7 +11,7 @@ conf %>% count(date) %>% rename(dn=n) %>% arrange(date) %>%
 (fromJSON("testdata.json")$tested %>% mutate(date=as.POSIXct(date))
     %>% rename(tested=value)) -> tests
 
-tc <- merge(tests, conf.agg, by="date", all=TRUE)
+tc <- full_join(tests, conf.agg, by="date")
 tc$dn[is.na(tc$dn)] <- 0
 tc %<>% filter(dn != 0 | tested != 0)
 
