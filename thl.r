@@ -11,7 +11,7 @@ library(dplyr)
 
 #d.new <- "2020-03-12"
 d.new <- "2020-03-28"
-thl.all %>% filter(date >= d.new) -> thl.new
+thl.new <-  filter(thl.all, date >= d.new)
 thl.lm <- lm(log10(n) ~ days, thl.new)
 thl.lm10 <- 10^(thl.lm$coefficients)
 thl.lm2 <- lm(n ~ days, thl.new)

@@ -3,24 +3,24 @@ library(ggplot2)
 library(dplyr)
 
 fromJSON("hsdata.json")$confirmed %>% mutate(date=as.POSIXct(date)) -> conf
-conf %>% count(date) %>% rename(dn=n) %>% arrange(date) %>%
+count(conf, date, name="dn") %>% arrange(date) %>%
     mutate(n=cumsum(dn),
            days=as.double(difftime(date, date[1], units="d"))) -> conf.agg
 
 #d.new <- "2020-03-12"
 d.new <- "2020-03-28"
-conf.agg %>% filter(date >= d.new) -> conf.new
+conf.new <- filter(conf.agg, date >= d.new)
 conf.lm <- lm(log10(n) ~ days, conf.new)
 conf.lm10 <- 10^(conf.lm$coefficients)
 conf.lm2 <- lm(n ~ days, conf.new)
 
 fromJSON("hsdata.json")$deaths %>% mutate(date=as.POSIXct(date)) -> dead
-dead %>% count(date) %>% rename(dn=n) %>% arrange(date) %>%
+count(dead, date, name="dn") %>% arrange(date) %>%
     mutate(n=cumsum(dn),
            days=as.double(difftime(date, date[1], units="d"))) -> dead.agg
 
 dd.new <- "2020-03-31"
-dead.agg %>% filter(date >= dd.new) -> dead.new
+dead.new <- filter(dead.agg, date >= dd.new)
 dead.lm <- lm(log10(n) ~ days, dead.new)
 dead.lm10 <- 10^(dead.lm$coefficients)
 dead.lm2 <- lm(n ~ days, dead.new)

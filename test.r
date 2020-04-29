@@ -4,7 +4,7 @@ library(magrittr)
 library(dplyr)
 
 fromJSON("hsdata.json")$confirmed %>% mutate(date=as.POSIXct(date)) -> conf
-conf %>% count(date) %>% rename(dn=n) %>% arrange(date) %>%
+count(conf, date, name="dn") %>% arrange(date) %>%
     mutate(n=cumsum(dn),
            days=as.double(difftime(date, date[1], units="d"))) -> conf.agg
 
